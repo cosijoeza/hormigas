@@ -1,0 +1,59 @@
+<!DOCTYPE html>	
+	<html>	
+		<head>
+			<title>Genetico</title>
+			<meta charset="UTF-8">
+				<!--Archivos de bootstrap-->
+			  <link rel="stylesheet" href="css/material.min.css">
+			  <link rel="stylesheet" href="css/bootstrap.min.css">
+			  <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+			  <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+			  <script src="js/jquery-slim.min.js"></script>
+			  <script src="js/popper.min.js"></script>
+			  <script src="js/bootstrap.js"></script>
+			  <script src="js/material.min.js"></script> 
+		</head>
+		<body style="background-color: #FAFAFA">
+			<header style="background: url('img/hormigas5.jpg'); height: 140px;padding-top: 25px;"><center><h1 style="color:#FFF">Colonia de Hormigas</h1></center></header>
+			<div class="conteiner" style="height: 50px;"></div>
+			<div class="conteiner">
+				<div class="row">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<!--Introducimos datos-->
+						<center>
+							<center><h2>Datos</h2></center>
+							<form>
+							  	<div class="form-group">
+								    <label for="elemets"></label>
+								    <!--Numero de ciudades-->
+								    <input type="text" class="form-control" id="hormigueros" placeholder="Hormigueros"/>
+								    <small  class="form-text text-muted">Inserta el numero de hormigueros</small>
+								    <!--Hormigas-->
+								    <input type="text" class="form-control" id="hormigas" placeholder="Hormigas"	>
+									<small  class="form-text text-muted">Inserta el numero de hormigas</small>
+								    <!--Tamaño de piblacion-->
+								    <input type="text" class="form-control" id="knn" placeholder="Vecinos más cercanos">
+								    <small  class="form-text text-muted">Inserta la cantidad K de vecinos más cercanos</small>
+								</div>
+								  <input type="button" class="btn btn-primary btn-lg btn-block" onclick="colonia()" value="Calcula"></input>
+							</form>
+						</center>
+					</div>
+					<div class="col-4"></div>
+				</div>
+				<div class="row">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<center>
+							<center><h2>Hormigueros</h2></center>
+							<canvas id="canvas" width="800" height="800"></canvas>
+						</center>
+					</div>
+					<div class="col-4"></div>
+				</div>	
+			</div>	
+		</body>
+		<script type="text/javascript" src="feromonas_bueno.js"></script>
+	</html>
+
