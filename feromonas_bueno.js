@@ -2,11 +2,11 @@ function colonia()
 {
 	/*Leo valores de las entradas*/
 	let hormigueros = document.getElementById("hormigueros").value;
-	let knn = document.getElementById("knn").value;
+	let knn = parseInt (document.getElementById("knn").value );
 	let hormigas = document.getElementById("hormigas").value;
 	INFINITY = 10000;
 	/*let hormigueros = 6;
-	let knn = 6;
+	let knn = 3;
 	let hormigas = 60;*/
 	
 	//De aquí salen las hormigas
@@ -20,6 +20,8 @@ function colonia()
 		for(let i=0;i<hormigueros;i++){visitados[i] = 0;}
 	//Mejor hormiga de cada colonia
 	var best_ant = new Object();
+	//Las mejores rutas de cada poblacion
+	var mejores = new Array();
 	//Mejor ruta de todas las colonias
 	best_route = new Object();
 	//Mapa global para conjunto de coordenadas de los hormigueros
@@ -31,12 +33,11 @@ function colonia()
 	mapa = points(hormigueros);
 	distancias = distance(mapa,hormigueros,knn);
 	tau = tau_(distancias,hormigueros);
-	var mejores = new Array();
+	//Dibujamos los puntos con los K mas cercanos
+	dibuja();
 	console.log("Puntos");
 	console.log(mapa);
-
-	//Dibujamos hormigueros
-	dibuja();
+	console.table(distancias);
 
 	//Iteramos
 	for(var iteracion = 0; iteracion < 10; iteracion++)
@@ -78,7 +79,7 @@ function colonia()
 			}
 			tau[ camino.ruta[0] ][ camino.ruta[hormigueros-1] ] = tau[ camino.ruta[0] ][ camino.ruta[hormigueros-1] ] + incremento;
 		}
-
+		//console.table(tau);
 		//Mejor poblador		
 		best_ant = rutas[0];
 		//Almacenamos mejor poblador
@@ -135,7 +136,6 @@ function distance(map,hormigueros,knn)
 	}
 	//Calculo los k hormigueros más cercanos 
 	distancias = knn_(distancias,hormigueros,knn);
-	//************************GRAFICAR LOS PUNTOS*****************************//
 
 	//Poner los vecinos más lejanos en INFINITO
 	for(var i = 0; i < hormigueros; i++)
@@ -177,7 +177,6 @@ function knn_(distancias,hormigueros,knn)
 		}
 		//Ordeno de acuerdo a la distancia
 		ordenados.sort(function(a,b){return a.valor-b.valor});
-
 		//Deja la distancia de los knn (k vecinos más cercanos) en matriz de distancias
 		for(j = (knn + 1); j < hormigueros; j++ )
 		{
@@ -302,10 +301,13 @@ function dibuja()
 	{
 		for(var j = 0; j < hormigueros; j++)
 		{
-			canvas.beginPath();
-				canvas.moveTo(padding + mapa[i].x * separacion,padding + mapa[i].y * separacion);
-				canvas.lineTo(padding + mapa[j].x * separacion,padding + mapa[j].y * separacion);
-			canvas.stroke();
+			if(distancias[i][j] != 10000)
+			{
+				canvas.beginPath();
+					canvas.moveTo(padding + mapa[i].x * separacion,padding + mapa[i].y * separacion);
+					canvas.lineTo(padding + mapa[j].x * separacion,padding + mapa[j].y * separacion);
+				canvas.stroke();
+			}
 		}		
 	}
 	//--Dibujo el mapa de puntos--//
@@ -323,7 +325,7 @@ function dibuja_mejor()
 	var radio = 5;
 	var padding = 20;
 	var separacion = 6;
-	//--Dibujo los vertices. Todos contra todos--//
+	//--Dibujo los vertices del mejor camino--//
 	canvas.strokeStyle = "rgb(0,255,0)";
 	for(var i = 0; i < (hormigueros-1); i++)
 	{
@@ -332,13 +334,16 @@ function dibuja_mejor()
 			canvas.lineTo(padding + mapa[ best_route.ruta[i+1] ].x * separacion,padding + mapa[ best_route.ruta[i+1] ].y * separacion);
 		canvas.stroke();		
 	}
-	/*//Linea final
-	canvas.beginPath();
-			canvas.moveTo(padding + mapa[ best_route.ruta[0] ].x * separacion,padding + mapa[best_route.ruta[0]].y * separacion);
-			canvas.lineTo(padding + mapa[ best_route.ruta[hormigueros-1] ].x * separacion,padding + mapa[ best_route.ruta[hormigueros-1] ].y * separacion);
-	canvas.stroke();*/
 
-
+	//Puntos
+	//--Dibujo el mapa de puntos--//
+	canvas.fillStyle = "rgb(0,0,0)";
+	for(var i = 0; i < hormigueros; i++)	
+	{
+		canvas.beginPath();
+		canvas.arc(padding + mapa[i].x * separacion,padding + mapa[i].y * separacion,radio,0,Math.PI*2);
+		canvas.fill();
+	}	
 	//--Inicio--//
 	canvas.fillStyle = "rgb(255,0,0)";
 	canvas.beginPath();
@@ -349,14 +354,4 @@ function dibuja_mejor()
 	canvas.beginPath();
 		canvas.arc(padding + mapa[ best_route.ruta[hormigueros-1] ].x * separacion,padding + mapa[ best_route.ruta[hormigueros-1] ].y * separacion,radio,0,Math.PI*2);
 	canvas.fill();
-
-	//Puntos
-	//--Dibujo el mapa de puntos--//
-	canvas.fillStyle = "rgb(0,0,0)";
-	for(var i = 0; i < hormigueros; i++)	
-	{
-		canvas.beginPath();
-		canvas.arc(padding + mapa[i].x * separacion,padding + mapa[i].y * separacion,radio,0,Math.PI*2);
-		canvas.fill();
-	}
 }
